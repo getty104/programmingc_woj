@@ -4,8 +4,8 @@ using namespace std;
 typedef long long ll;
 typedef unsigned long long ull;
 typedef pair<ll, ll> P;
-typedef vector<char> Vector;
-typedef vector<vector<char> > DVector;
+typedef vector<ll> Vector;
+typedef vector<vector<ll> > DVector;
 
 #define fi          first
 #define se          second
@@ -28,64 +28,26 @@ typedef vector<vector<char> > DVector;
 #define usort(x)    sort(all(x))
 #define dsort(x)    sort(all(x),greater<int>())
 #define mkp(x,y)    make_pair(x,y)
-int n,m;
-DVector mp;
-int ct = 1;
-
-void dfs(int cn, int cm){
-  int mx = 0;
-  int flag = true;
-  if(cn < n-1 && mp[cn+1][cm] == '.'){
-    flag = false;
-    mp[cn+1][cm] = '#';
-    ct++;
-    dfs(cn+1,cm);
+int n;
+Vector a;
+int find_min(int left, int right){
+  int mid = (left+right)/2;
+  if(left == right-1){
+    cout << a[left] << endl;
+    return a[left];
   }
-
-  if(cm < m-1 && mp[cn][cm+1] == '.'){
-    flag = false;
-    mp[cn][cm+1] = '#';
-    ct++;
-    dfs(cn,cm+1);
-  }
-
-  if(cn > 0 && mp[cn-1][cm] == '.'){
-    flag = false;
-    mp[cn-1][cm] = '#';
-    ct++;
-    dfs(cn-1,cm);
-  }
-
-  if(cm > 0 && mp[cn][cm-1] == '.'){
-    flag = false;
-    mp[cn][cm-1] = '#';
-    ct++;
-    dfs(cn,cm-1);
-  }
+  int f = find_min(left,mid);
+  int l = find_min(mid,right);
+  int mn = mmin(f,l);
+  cout << mn << endl;
+  return mn;
 }
 
 
 int main(){
   cin.sync_with_stdio(false);
-
-  while(true){
-    ct = 1;
-    cin >> m >> n;
-    if(m == 0 && n == 0)break;
-    int stn,stm;
-    mp.resize(n,Vector(m));
-    rep(i,n)rep(j,m){
-      char tmp;
-      cin >> tmp;
-      if(tmp == '@'){
-        stn = i;
-        stm = j;
-        mp[i][j] = '#';
-      }
-      else mp[i][j] = tmp;
-    }
-
-    dfs(stn,stm);
-    cout << ct << endl;
-  }
+  cin >> n;
+  a.resize(n);
+  rep(i,n)cin >> a[i];
+  find_min(0,n);
 }

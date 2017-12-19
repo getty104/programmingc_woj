@@ -4,8 +4,8 @@ using namespace std;
 typedef long long ll;
 typedef unsigned long long ull;
 typedef pair<ll, ll> P;
-typedef vector<char> Vector;
-typedef vector<vector<char> > DVector;
+typedef vector<ll> Vector;
+typedef vector<vector<ll>> DVector;
 
 #define fi          first
 #define se          second
@@ -28,64 +28,53 @@ typedef vector<vector<char> > DVector;
 #define usort(x)    sort(all(x))
 #define dsort(x)    sort(all(x),greater<int>())
 #define mkp(x,y)    make_pair(x,y)
-int n,m;
-DVector mp;
-int ct = 1;
-
-void dfs(int cn, int cm){
-  int mx = 0;
-  int flag = true;
-  if(cn < n-1 && mp[cn+1][cm] == '.'){
-    flag = false;
-    mp[cn+1][cm] = '#';
-    ct++;
-    dfs(cn+1,cm);
+Vector A;
+ll ct =0;
+void merge(ll left, ll mid, ll right){
+  ct++;
+  ll n1 = mid - left;
+  ll n2 = right - mid;
+  Vector L(n1+1);
+  Vector R(n2+1);
+  rep(i,n1){
+    L[i] = A[left + i];
+  }
+  rep(i,n2){
+    R[i] = A[mid + i];
   }
 
-  if(cm < m-1 && mp[cn][cm+1] == '.'){
-    flag = false;
-    mp[cn][cm+1] = '#';
-    ct++;
-    dfs(cn,cm+1);
-  }
+  L[n1] = -1;
+  R[n2] = -1;
+  ll i = 0;
+  ll j = 0;
+  repl(k,left,right-1){
+    if(L[i] >= R[j]){
+      A[k] = L[i];
+      i++;
+    }else{
+     A[k] = R[j];
+     j++;
+   }
+ }
+}
 
-  if(cn > 0 && mp[cn-1][cm] == '.'){
-    flag = false;
-    mp[cn-1][cm] = '#';
-    ct++;
-    dfs(cn-1,cm);
-  }
-
-  if(cm > 0 && mp[cn][cm-1] == '.'){
-    flag = false;
-    mp[cn][cm-1] = '#';
-    ct++;
-    dfs(cn,cm-1);
+void mergeSort(ll left, ll right){
+  if(left+1 < right){
+    ll mid = (left + right)/2;
+    mergeSort(left, mid);
+    mergeSort(mid, right);
+    merge(left, mid, right);
   }
 }
 
-
 int main(){
   cin.sync_with_stdio(false);
-
-  while(true){
-    ct = 1;
-    cin >> m >> n;
-    if(m == 0 && n == 0)break;
-    int stn,stm;
-    mp.resize(n,Vector(m));
-    rep(i,n)rep(j,m){
-      char tmp;
-      cin >> tmp;
-      if(tmp == '@'){
-        stn = i;
-        stm = j;
-        mp[i][j] = '#';
-      }
-      else mp[i][j] = tmp;
-    }
-
-    dfs(stn,stm);
-    cout << ct << endl;
-  }
+  ll n;
+  cin >> n;
+  A.resize(n);
+  rep(i,n)cin >> A[i];
+  mergeSort(0, n);
+  rep(i,n)cout << (i != 0 ? " ": "") << A[i];
+  cout << endl;
+  cout << ct << endl;
 }

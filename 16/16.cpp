@@ -4,8 +4,8 @@ using namespace std;
 typedef long long ll;
 typedef unsigned long long ull;
 typedef pair<ll, ll> P;
-typedef vector<char> Vector;
-typedef vector<vector<char> > DVector;
+typedef vector<ll> Vector;
+typedef vector<vector<ll>> DVector;
 
 #define fi          first
 #define se          second
@@ -29,63 +29,17 @@ typedef vector<vector<char> > DVector;
 #define dsort(x)    sort(all(x),greater<int>())
 #define mkp(x,y)    make_pair(x,y)
 int n,m;
-DVector mp;
-int ct = 1;
-
-void dfs(int cn, int cm){
-  int mx = 0;
-  int flag = true;
-  if(cn < n-1 && mp[cn+1][cm] == '.'){
-    flag = false;
-    mp[cn+1][cm] = '#';
-    ct++;
-    dfs(cn+1,cm);
-  }
-
-  if(cm < m-1 && mp[cn][cm+1] == '.'){
-    flag = false;
-    mp[cn][cm+1] = '#';
-    ct++;
-    dfs(cn,cm+1);
-  }
-
-  if(cn > 0 && mp[cn-1][cm] == '.'){
-    flag = false;
-    mp[cn-1][cm] = '#';
-    ct++;
-    dfs(cn-1,cm);
-  }
-
-  if(cm > 0 && mp[cn][cm-1] == '.'){
-    flag = false;
-    mp[cn][cm-1] = '#';
-    ct++;
-    dfs(cn,cm-1);
+int dfs(ct){
+  if(ct == n-m)return 1;
+  else{
+    int n = 0;
+    n = dfs(a,ct+1) + dfs(ct);
   }
 }
 
 
 int main(){
   cin.sync_with_stdio(false);
+  cin >> n >> m;
 
-  while(true){
-    ct = 1;
-    cin >> m >> n;
-    if(m == 0 && n == 0)break;
-    int stn,stm;
-    mp.resize(n,Vector(m));
-    rep(i,n)rep(j,m){
-      char tmp;
-      cin >> tmp;
-      if(tmp == '@'){
-        stn = i;
-        stm = j;
-        mp[i][j] = '#';
-      }
-      else mp[i][j] = tmp;
-    }
-
-    dfs(stn,stm);
-    cout << ct << endl;
-  }
 }

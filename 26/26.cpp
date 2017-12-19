@@ -43,12 +43,12 @@ void merge(ll left, ll mid, ll right){
     R[i] = A[mid + i];
   }
 
-  L[n1] = -1;
-  R[n2] = -1;
+  L[n1] = INF;
+  R[n2] = INF;
   ll i = 0;
   ll j = 0;
   repl(k,left,right-1){
-    if(L[i] >= R[j]){
+    if(L[i] <= R[j]){
       A[k] = L[i];
       i++;
     }else{
@@ -65,6 +65,7 @@ void mergeSort(ll left, ll right){
     mergeSort(left, mid);
     mergeSort(mid, right);
     merge(left, mid, right);
+    cout << ct << endl;
   }
 }
 int main(){

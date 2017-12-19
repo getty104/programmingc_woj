@@ -35,7 +35,7 @@ int partition(int p, int r){
   int x = A[r];
   int i = p-1;
   repl(j,p,r-1){
-    if(A[j] <= x){
+    if(A[j] >= x){
       i++;
       swap(A[i],A[j]);
     }

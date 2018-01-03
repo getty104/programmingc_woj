@@ -31,16 +31,16 @@ typedef vector<Vector> DVector;
 
 Vector A;
 int partition(int p, int r){
-  int x = A[r];
-  int i = p-1;
-  repl(j,p,r-1){
+  int x = A[p];
+  int i = r+1;
+  for(int j=p+1; j <= r; j++){
     if(A[j] >= x){
-      i++;
+      i--;
       swap(A[i],A[j]);
     }
   }
-  swap(A[i+1],A[r]);
-  return i+1;
+  swap(A[p],A[i-1]);
+  return i;
 }
 
 int main(){
@@ -49,10 +49,9 @@ int main(){
   cin >> n;
   int x;
   A.resize(n);
-  rep(i,n)cin >> A[n-1-i];
+  rep(i,n)cin >> A[i];
   int idx = partition(0,n-1);
-  rep(i,n)cout << (i == 0 ? "" : " ") << A[n-1-i];
+  rep(i,n)cout << (i == 0 ? "" : " ") << A[i];
   cout << endl;
-  cout << n-idx << endl;
-
+  cout << idx << endl;
 }

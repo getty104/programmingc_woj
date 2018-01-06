@@ -64,7 +64,6 @@ void insert(int m){
 }
 
 bool find(int m, int current){
-
   if(tree.size() == 0 || current == -1)return false;
   if(tree[current].value == m)return true;
   else{
@@ -76,24 +75,34 @@ bool find(int m, int current){
 void del(int m, int current, int parent, int dir){
   if(tree[current].value == m){
     if(tree[current].left == -1 && tree[current].right == -1){
-      if(dir)tree[parent].left = -1;
-      else tree[parent].right = -1;
-    }
-    else if(tree[current].right == -1){
-      if(dir)tree[parent].left = tree[current].left;
-      else tree[parent].right = tree[current].left;
-    }
-    else if(tree[current].left == -1){
-      if(dir)tree[parent].left = tree[current].right;
-      else tree[parent].right = tree[current].right;
-    }
-    else{
-      if(dir)tree[parent].left = tree[current].right;
-      else tree[parent].right = tree[current].right;
+      if(parent != -1){
+        if(dir)tree[parent].left = -1;
+        else tree[parent].right = -1;
+      }else{
+        tree.pop_back();
+      }
+    }else if(tree[current].right == -1){
+      if(parent != -1){
+        if(dir)tree[parent].left = tree[current].left;
+        else tree[parent].right = tree[current].left;
+      }else{
+        tree[current] = tree[tree[current].left];
+      }
+    }else if(tree[current].left == -1){
+      if(parent != -1){
+        if(dir)tree[parent].left = tree[current].right;
+        else tree[parent].right = tree[current].right;
+      }else{
+        tree[current] = tree[tree[current].right];
+      }
+    }else{
+      int value = tree[tree[current].left].value;
+      tree[current].value = value;
+      del(value, tree[current].left, current, 1);
     }
   }else{
-    if(m <= tree[current].value)del(m, tree[current].left, current, 1);
-    else del(m, tree[current].right, current, 0);
+    if(m <= tree[current].value && tree[current].left != -1)del(m, tree[current].left, current, 1);
+    else if(m > tree[current].value && tree[current].right != -1) del(m, tree[current].right, current, 0);
   }
 }
 
@@ -130,6 +139,10 @@ int main(){
     else if(command == "find"){
       cin >> op;
       cout << (find(op,0) ? "yes" : "no") << endl;
+    }
+    else if(command == "delete"){
+      cin >> op;
+      del(op, 0 , -1, -1);
     }
   }
 }

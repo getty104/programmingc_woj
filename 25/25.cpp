@@ -32,15 +32,15 @@ typedef vector<Vector> DVector;
 Vector A;
 int partition(int p, int r){
   int x = A[p];
-  int i = r+1;
+  int i = p;
   for(int j=p+1; j <= r; j++){
-    if(A[j] >= x){
-      i--;
+    if(A[j] <= x){
+      i++;
       swap(A[i],A[j]);
     }
   }
-  swap(A[p],A[i-1]);
-  return i;
+  swap(A[p],A[i]);
+  return i+1;
 }
 
 int main(){

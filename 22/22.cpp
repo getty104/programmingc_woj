@@ -73,4 +73,5 @@ int main(){
   A.resize(n);
   rep(i,n)cin >> A[i];
   mergeSort(0,n);
+  cout << ct << endl;
 }

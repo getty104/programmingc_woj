@@ -28,16 +28,20 @@ typedef vector<Vector> DVector;
 #define exist(x,y)  (find(all(x),y)!=x.end())
 #define each(itr,v) for(auto itr:v)
 #define repl(i,a,b) for(ll i=(ll)(a);i<=(ll)(b);i++)
-int n,m;
-stack<Vector> st;
-int dfs(Vector list, int depth){
-  rep(i,m)
+DVector dp;
+int dfs(int m, int n) {
+  if (dp[m][n] != -1) return dp[m][n];
+  if (n == 0) return dp[m][n] = (m == 0);
+  int ret = 0;
+  rep(i, m + 1) ret += dfs(m - i, n - 1);
+  return dp[m][n] = ret;
 }
 
 int main(){
   cin.sync_with_stdio(false);
+  int m, n;
   cin >> m >> n;
-  Vector list(n,0);
-  dup.resize(m+1);
-  cout << dfs(list,0) << endl;
+  dp.resize(m+1, Vector(n+1,-1));
+  cout << dfs(m, n) << endl;
+  return 0;
 }

@@ -1,7 +1,6 @@
 #include "raceState.hpp"
 
 const int searchDepth = 15;
-
 struct PlayerState {
   Point position;
   IntVec velocity;
@@ -15,15 +14,15 @@ struct PlayerState {
 };
 
 struct Candidate {
-  int step;			// Steps needed to come here
-  PlayerState state;		// State of the player
-  Candidate *from;		// Came here from this place
-  IntVec how;			//   with this acceleration
+  int step;     // Steps needed to come here
+  PlayerState state;    // State of the player
+  Candidate *from;    // Came here from this place
+  IntVec how;     //   with this acceleration
   Candidate(int t, PlayerState s, Candidate *f, IntVec h):
   step(t), state(s), from(f), how(h) {}
 };
 
-IntVec play(RaceState &rs, const Course &course) {
+IntVec play(RaceState &rs, const Course &course,bool flag) {
   queue <Candidate *> candidates;
   map <PlayerState, Candidate *> reached;
   PlayerState initial(rs.position, rs.velocity);
@@ -35,13 +34,14 @@ IntVec play(RaceState &rs, const Course &course) {
   do {
     Candidate *c = candidates.front();
     candidates.pop();
-    random_device rnd;
     for (int cay = 1; cay != -2; cay--) {
       for (int cax = -1; cax != 2; cax++) {
         IntVec nextVelo = c->state.velocity + IntVec(cax, cay);
         Point nextPos = c->state.position + nextVelo;
-        IntVec extendVelo = c->state.velocity + IntVec(cax*(rnd() % 20)/10.0, cay*(rnd() % 20)/10.0);
+        IntVec extendVelo = c->state.velocity + IntVec(cax, cay);
         Point extendPos = c->state.position + extendVelo;
+        if(flag)for(int i=0; i < c->state.velocity.y+1; i++)extendPos = extendPos + extendVelo;
+
         if ((c->step != 0 ||
              !LineSegment(c->state.position, extendPos).goesThru(rs.oppPosition)) &&
          !course.obstacled(c->state.position, extendPos)) {
@@ -76,6 +76,7 @@ if (best == &initialCand) {
   else if (rs.velocity.x > 0) ax -= 1;
   if (rs.velocity.y < 0) ay += 1;
   else if (rs.velocity.y > 0) ay -= 1;
+  if(ax == 0 && ay == 0 && flag)return play(rs, course, false);
   return IntVec(ax, ay);
 }
 Candidate *c = best;
@@ -89,7 +90,7 @@ int main(int argc, char *argv[]) {
   cout.flush();
   while (true) {
     RaceState rs(cin, course);
-    IntVec accel = play(rs, course);
+    IntVec accel = play(rs, course, true);
     cout << accel.x << ' ' << accel.y << endl;
   }
 }

@@ -60,6 +60,7 @@ struct UnionFind{
   // 同じ連結成分のサイズ
   int size(int x) { return -v[find(x)]; }
 };
+
 int main(){
   cin.sync_with_stdio(false);
   int n,m;
